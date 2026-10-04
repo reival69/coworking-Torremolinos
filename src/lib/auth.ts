@@ -1,0 +1,32 @@
+import "server-only";
+import { cache } from "react";
+import { redirect } from "next/navigation";
+import { isSupabaseConfigured } from "@/lib/env";
+import { createClient } from "@/lib/supabase/server";
+import type { Profile } from "@/lib/types";
+
+export const getSession = cache(async () => {
+  if (!isSupabaseConfigured()) return null;
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+
+  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single<Profile>();
+  if (!profile) return null;
+
+  return { supabase, user, profile };
+});
+
+export async function requireMember() {
+  const session = await getSession();
+  if (!session) redirect("/login");
+  return session;
+}
+
+export async function requireAdmin() {
+  const session = await requireMember();
+  if (session.profile.role !== "admin") redirect("/app");
+  return session;
+}

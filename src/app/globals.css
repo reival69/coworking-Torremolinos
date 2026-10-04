@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+:root {
+  --sand: #f6f1e7;
+  --sand-deep: #ece3d2;
+  --ink: #1d2a33;
+  --ink-soft: #52616b;
+  --terracotta: #c65d3b;
+  --terracotta-dark: #a8482a;
+  --sea: #1f6f8b;
+  --line: #ddd2bd;
+  --card: #fffdf8;
+}
+
+@theme inline {
+  --color-sand: var(--sand);
+  --color-sand-deep: var(--sand-deep);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-terracotta: var(--terracotta);
+  --color-terracotta-dark: var(--terracotta-dark);
+  --color-sea: var(--sea);
+  --color-line: var(--line);
+  --color-card: var(--card);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-fraunces);
+}
+
+body {
+  background: var(--sand);
+  color: var(--ink);
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors disabled:opacity-50;
+}
+@utility btn-primary {
+  @apply btn bg-terracotta text-white hover:bg-terracotta-dark;
+}
+@utility btn-ghost {
+  @apply btn border border-line bg-card text-ink hover:bg-sand-deep;
+}
+@utility card {
+  @apply rounded-2xl border border-line bg-card p-6;
+}
+@utility input {
+  @apply w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm outline-none focus:border-sea focus:ring-2 focus:ring-sea/20;
+}
+@utility label {
+  @apply mb-1.5 block text-sm font-medium text-ink;
+}
+@utility badge {
+  @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold;
+}
