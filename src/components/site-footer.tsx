@@ -30,7 +30,7 @@ export function SiteFooter() {
             Solicitar información
           </Link>
           <Link href="/login" className="block hover:text-white">
-            Área de miembros
+            Área de clientes
           </Link>
         </div>
       </div>

@@ -58,7 +58,7 @@ export function AuthForm({ mode, plan }: { mode: "login" | "registro"; plan?: st
       <p className="text-center text-sm text-ink-soft">
         {isSignup ? (
           <>
-            ¿Ya eres miembro?{" "}
+            ¿Ya tienes cuenta?{" "}
             <Link href="/login" className="font-semibold text-terracotta">
               Inicia sesión
             </Link>

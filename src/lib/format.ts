@@ -53,6 +53,42 @@ export function madridToUtc(date: string, hour: number) {
   return new Date(guess.getTime() - (asMadrid - guess.getTime()));
 }
 
+/** Suma días a una fecha YYYY-MM-DD. */
+export function addDays(date: string, days: number) {
+  const [y, m, d] = date.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d + days)).toISOString().slice(0, 10);
+}
+
+/** Suma meses a una fecha YYYY-MM-DD; si el día no existe usa el último del mes (igual que Postgres). */
+export function addMonths(date: string, months: number) {
+  const [y, m, d] = date.split("-").map(Number);
+  const lastDay = new Date(Date.UTC(y, m - 1 + months + 1, 0)).getUTCDate();
+  return new Date(Date.UTC(y, m - 1 + months, Math.min(d, lastDay))).toISOString().slice(0, 10);
+}
+
+export const VAT_RATE = 0.21;
+
+export function withVat(cents: number) {
+  return Math.round(cents * (1 + VAT_RATE));
+}
+
+export const UNIT_LABEL = {
+  hour: { one: "hora", many: "horas", mode: "Por horas", per: "/h" },
+  day: { one: "día", many: "días", mode: "Por días", per: "/día" },
+  month: { one: "mes", many: "meses", mode: "Por meses", per: "/mes" },
+} as const;
+
+export function formatQuantity(unit: keyof typeof UNIT_LABEL, quantity: number) {
+  return `${quantity} ${quantity === 1 ? UNIT_LABEL[unit].one : UNIT_LABEL[unit].many}`;
+}
+
+/** "lun 6 oct 10:00–12:00" por horas; "6 oct 2026 → 8 oct 2026 (3 días)" por días o meses. */
+export function formatBookingRange(b: { starts_at: string; ends_at: string; unit: keyof typeof UNIT_LABEL; quantity: number }) {
+  if (b.unit === "hour") return `${formatDateTime(b.starts_at)}–${formatTime(b.ends_at)}`;
+  const lastDay = b.unit === "month" ? new Date(new Date(b.ends_at).getTime() - 24 * 3600 * 1000) : b.ends_at;
+  return `${formatDate(b.starts_at)} → ${formatDate(lastDay)} (${formatQuantity(b.unit, b.quantity)})`;
+}
+
 export const SPACE_KIND_LABEL = {
   desk: "Puesto",
   meeting_room: "Sala de reuniones",

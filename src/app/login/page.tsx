@@ -17,12 +17,12 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
       </div>
       <div className="card w-full max-w-md">
         <h1 className="mb-1 font-display text-2xl font-semibold">
-          {mode === "registro" ? "Hazte miembro" : "Accede a tu cuenta"}
+          {mode === "registro" ? "Crea tu cuenta" : "Accede a tu cuenta"}
         </h1>
         <p className="mb-6 text-sm text-ink-soft">
           {mode === "registro"
-            ? "Crea tu cuenta y te activamos la membresía tras la primera visita."
-            : "Reserva salas y puestos, y consulta tus facturas."}
+            ? "Regístrate y reserva oficinas y salas por horas, días o meses. Pagas por factura."
+            : "Reserva oficinas y salas, y consulta tus facturas."}
         </p>
         {isSupabaseConfigured() ? (
           <AuthForm mode={mode} plan={plan} />

@@ -92,7 +92,7 @@ export const FAQS = [
   },
   {
     q: "¿Cómo reservo una sala de reuniones?",
-    a: "Desde el área de miembros: eliges sala, día y horas, y la reserva queda confirmada al momento.",
+    a: "Desde tu área de cliente: eliges el espacio y si lo quieres por horas, días o meses. La reserva queda confirmada al momento y te enviamos la factura.",
   },
   {
     q: "¿Puedo usar la dirección del coworking para mi empresa?",

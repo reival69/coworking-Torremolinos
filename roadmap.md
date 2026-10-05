@@ -10,10 +10,13 @@
 - [x] Admin: miembros, reservas, facturas manuales y cuotas mensuales
 - [x] Landing estilo Regus: menú de productos, 6 productos con foto, servicios, beneficios, FAQ
 - [x] Formulario de contacto (`/contacto`) → tabla `leads` + bandeja en `/admin/contactos`
+- [x] Proyecto Supabase con migraciones y seed; desplegado en Vercel
+- [x] Reservas por hora, día o mes para cualquier cliente registrado; facturar reserva con IVA 21%
+- [x] Admin: editar espacios y precios
 
 ## Pendiente
-- [ ] Crear proyecto Supabase, aplicar migración y seed, configurar `.env.local`
-- [ ] Desplegar en Vercel y conectar dominio
+- [ ] Versión en inglés
+- [ ] Conectar dominio propio
 - [ ] Pagos con Stripe (Checkout para facturas pendientes + webhook que las marque cobradas)
 - [ ] PDF de factura con datos fiscales del coworking
 - [ ] Bolsa de horas de sala incluidas en cada plan y cobro de horas extra

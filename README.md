@@ -11,6 +11,7 @@ Web pública + área de miembros + panel de administración para un coworking en
    - `supabase/migrations/20261004120000_leads.sql`
    - `supabase/migrations/20261005000000_harden_functions.sql`
    - `supabase/migrations/20261005000100_public_catalog_read.sql`
+   - `supabase/migrations/20261006000000_flexible_bookings.sql`
    - `supabase/seed.sql` (tarifas y espacios de ejemplo)
 2. Copia `.env.example` a `.env.local` y rellena la URL y la anon key del proyecto.
 3. `npm install && npm run dev` → http://localhost:3000
@@ -29,16 +30,20 @@ En Supabase → Authentication → URL Configuration, añade `https://<tu-domini
 | `/contacto` | Formulario de solicitud de información (`?interes=<producto>`) |
 | `/login` | Acceso y registro de miembros |
 | `/app` | Próximas reservas y estado de la membresía |
-| `/app/reservas` | Disponibilidad por espacio y día, reservar por horas |
+| `/app/reservas` | Disponibilidad y reserva de oficinas, salas y puestos por horas, días o meses |
 | `/app/cuenta` | Datos personales/fiscales, plan y facturas |
 | `/admin` | Miembros: asignar plan y activar/pausar membresía |
-| `/admin/reservas` | Todas las reservas próximas, cancelar |
+| `/admin/reservas` | Reservas próximas con precio; facturar (con IVA 21%) o cancelar |
+| `/admin/espacios` | Espacios y precios por hora, día y mes (sin IVA) |
 | `/admin/facturas` | Crear facturas, generar cuotas del mes, marcar cobradas |
 | `/admin/contactos` | Solicitudes llegadas desde la web |
 
 ## Reglas de negocio
 
-- Solo los miembros con membresía **activa** pueden reservar (lo impone RLS, no solo la UI).
+- Cualquier cliente registrado puede reservar; se cobra por factura (el admin factura cada reserva).
+- Cada espacio se alquila por hora, día y/o mes según los precios que tenga (vacío = no se ofrece).
+- El precio de la reserva lo calcula Postgres (trigger `prepare_booking`), que también valida que las fechas encajen con la modalidad.
+- Un cliente solo puede cancelar sus reservas, no cambiar fechas ni precio (trigger `protect_booking_fields`).
 - Postgres impide reservas solapadas del mismo espacio (`exclude using gist`).
 - Horario reservable 8:00–20:00, hora de Madrid (`src/app/app/reservas/config.ts`).
 - Un miembro no puede cambiarse rol, plan ni estado (trigger `protect_profile_fields`).

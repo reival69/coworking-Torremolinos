@@ -44,7 +44,7 @@ export default async function AdminInvoicesPage() {
                 <thead className="bg-sand-deep text-left text-ink-soft">
                   <tr>
                     <th className="px-4 py-2.5 font-medium">Nº</th>
-                    <th className="px-4 py-2.5 font-medium">Miembro</th>
+                    <th className="px-4 py-2.5 font-medium">Cliente</th>
                     <th className="px-4 py-2.5 font-medium">Concepto</th>
                     <th className="px-4 py-2.5 font-medium">Vence</th>
                     <th className="px-4 py-2.5 text-right font-medium">Importe</th>
@@ -90,7 +90,7 @@ export default async function AdminInvoicesPage() {
           <form action={createInvoice} className="space-y-4">
             <div>
               <label className="label" htmlFor="member_id">
-                Miembro
+                Cliente
               </label>
               <select className="input" id="member_id" name="member_id" required>
                 {members?.map((m) => (

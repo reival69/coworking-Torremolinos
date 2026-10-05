@@ -5,7 +5,7 @@ import { formatDate, MEMBERSHIP_LABEL } from "@/lib/format";
 import type { Plan, Profile } from "@/lib/types";
 import { updateMembership } from "./actions";
 
-export const metadata: Metadata = { title: "Miembros" };
+export const metadata: Metadata = { title: "Clientes" };
 
 export default async function AdminMembersPage() {
   const { supabase } = await requireAdmin();
@@ -18,7 +18,7 @@ export default async function AdminMembersPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-3xl font-semibold">Miembros</h1>
+      <h1 className="font-display text-3xl font-semibold">Clientes</h1>
 
       <div className="grid gap-4 sm:grid-cols-3">
         {(["active", "pending", "paused"] as const).map((s) => (

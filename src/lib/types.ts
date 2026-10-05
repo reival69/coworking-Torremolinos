@@ -16,6 +16,8 @@ export type Space = {
   kind: "desk" | "meeting_room" | "office";
   capacity: number;
   hourly_price_cents: number;
+  daily_price_cents: number | null;
+  monthly_price_cents: number | null;
   description: string | null;
   active: boolean;
 };
@@ -44,7 +46,13 @@ export type Booking = {
   ends_at: string;
   status: "confirmed" | "cancelled";
   notes: string | null;
+  unit: BookingUnit;
+  quantity: number;
+  price_cents: number;
+  invoice_id: string | null;
 };
+
+export type BookingUnit = "hour" | "day" | "month";
 
 export type Invoice = {
   id: string;

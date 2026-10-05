@@ -2,7 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
-import type { MembershipStatus } from "@/lib/types";
+import { formatBookingRange, formatEuros, withVat } from "@/lib/format";
+import type { Booking, MembershipStatus, Space } from "@/lib/types";
 
 const STATUSES: MembershipStatus[] = ["pending", "active", "paused", "cancelled"];
 
@@ -89,4 +90,74 @@ export async function setLeadStatus(formData: FormData) {
 
   await supabase.from("leads").update({ status }).eq("id", id);
   revalidatePath("/admin/contactos");
+}
+
+/** Crea la factura de una reserva (precio + IVA 21%) y la deja enlazada. */
+export async function invoiceBooking(formData: FormData) {
+  const { supabase } = await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+
+  const { data: booking } = await supabase
+    .from("bookings")
+    .select("*, space:spaces(name)")
+    .eq("id", id)
+    .is("invoice_id", null)
+    .single<Booking & { space: Pick<Space, "name"> }>();
+  if (!booking || booking.status !== "confirmed") return;
+
+  const { data: invoice } = await supabase
+    .from("invoices")
+    .insert({
+      member_id: booking.member_id,
+      concept: `${booking.space.name} — ${formatBookingRange(booking)} (base ${formatEuros(booking.price_cents)} + IVA 21%)`,
+      amount_cents: withVat(booking.price_cents),
+    })
+    .select("id")
+    .single();
+  if (invoice) await supabase.from("bookings").update({ invoice_id: invoice.id }).eq("id", booking.id);
+
+  revalidatePath("/admin/reservas");
+  revalidatePath("/admin/facturas");
+}
+
+function euroInputToCents(value: FormDataEntryValue | null): number | null {
+  const text = String(value ?? "").trim().replace(",", ".");
+  if (!text) return null;
+  const amount = Number(text);
+  return Number.isFinite(amount) && amount > 0 ? Math.round(amount * 100) : null;
+}
+
+export async function updateSpace(formData: FormData) {
+  const { supabase } = await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const name = String(formData.get("name") ?? "").trim();
+  const capacity = Number(formData.get("capacity"));
+  if (!name || !Number.isInteger(capacity) || capacity < 1) return;
+
+  await supabase
+    .from("spaces")
+    .update({
+      name,
+      capacity,
+      description: String(formData.get("description") ?? "").trim() || null,
+      hourly_price_cents: euroInputToCents(formData.get("hourly")) ?? 0,
+      daily_price_cents: euroInputToCents(formData.get("daily")),
+      monthly_price_cents: euroInputToCents(formData.get("monthly")),
+      active: formData.get("active") === "on",
+    })
+    .eq("id", id);
+  revalidatePath("/admin/espacios");
+  revalidatePath("/app/reservas");
+  revalidatePath("/");
+}
+
+export async function createSpace(formData: FormData) {
+  const { supabase } = await requireAdmin();
+  const name = String(formData.get("name") ?? "").trim();
+  const kind = String(formData.get("kind") ?? "");
+  const capacity = Number(formData.get("capacity") ?? 1);
+  if (!name || !["desk", "meeting_room", "office"].includes(kind) || !Number.isInteger(capacity) || capacity < 1) return;
+
+  await supabase.from("spaces").insert({ name, kind, capacity });
+  revalidatePath("/admin/espacios");
 }

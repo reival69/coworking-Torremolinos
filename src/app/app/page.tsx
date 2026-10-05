@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { MembershipBadge } from "@/components/status-badge";
 import { requireMember } from "@/lib/auth";
-import { formatDateTime, formatTime, SPACE_KIND_LABEL } from "@/lib/format";
+import { formatBookingRange, formatEuros, SPACE_KIND_LABEL } from "@/lib/format";
 import type { Booking, Plan, Space } from "@/lib/types";
 import { cancelBooking } from "./reservas/actions";
 
@@ -26,21 +26,13 @@ export default async function MemberHome() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="font-display text-3xl font-semibold">Hola, {profile.full_name?.split(" ")[0] ?? "miembro"}</h1>
-        <p className="mt-2 flex flex-wrap items-center gap-2 text-ink-soft">
-          Membresía <MembershipBadge status={profile.membership_status} />
-          {plan && <span>· Plan {plan.name}</span>}
-        </p>
-      </div>
-
-      {profile.membership_status === "pending" && (
-        <div className="card border-amber-300 bg-amber-50">
-          <p className="font-semibold">Tu membresía está pendiente de activar</p>
-          <p className="mt-1 text-sm text-ink-soft">
-            Te la activamos en tu primera visita o al confirmar el pago. Mientras tanto no podrás hacer reservas.
+        <h1 className="font-display text-3xl font-semibold">Hola, {profile.full_name?.split(" ")[0] ?? ""}</h1>
+        {plan && (
+          <p className="mt-2 flex flex-wrap items-center gap-2 text-ink-soft">
+            Plan {plan.name} <MembershipBadge status={profile.membership_status} />
           </p>
-        </div>
-      )}
+        )}
+      </div>
 
       <section>
         <div className="mb-4 flex items-center justify-between">
@@ -56,7 +48,7 @@ export default async function MemberHome() {
                 <div>
                   <p className="font-semibold">{b.space.name}</p>
                   <p className="text-sm text-ink-soft">
-                    {SPACE_KIND_LABEL[b.space.kind]} · {formatDateTime(b.starts_at)}–{formatTime(b.ends_at)}
+                    {SPACE_KIND_LABEL[b.space.kind]} · {formatBookingRange(b)} · {formatEuros(b.price_cents)} + IVA
                   </p>
                 </div>
                 <form action={cancelBooking}>

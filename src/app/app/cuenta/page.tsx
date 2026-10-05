@@ -56,7 +56,7 @@ export default async function CuentaPage({ searchParams }: PageProps<"/app/cuent
 
       <div className="space-y-6">
         <section className="card">
-          <h2 className="mb-3 font-display text-xl font-semibold">Membresía</h2>
+          <h2 className="mb-3 font-display text-xl font-semibold">Plan mensual</h2>
           <p className="flex flex-wrap items-center gap-2">
             <MembershipBadge status={profile.membership_status} />
             {plan ? (

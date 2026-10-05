@@ -28,7 +28,7 @@ export function SiteHeader() {
             Preguntas
           </Link>
           <Link href="/login" className="px-3 py-2 hover:text-terracotta">
-            Área de miembros
+            Área de clientes
           </Link>
         </nav>
         <div className="flex items-center gap-2">
