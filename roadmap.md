@@ -8,6 +8,8 @@
 - [x] Reservas por horas con disponibilidad y bloqueo de solapes en BD
 - [x] Mi cuenta: datos fiscales, plan, facturas
 - [x] Admin: miembros, reservas, facturas manuales y cuotas mensuales
+- [x] Landing estilo Regus: menú de productos, 6 productos con foto, servicios, beneficios, FAQ
+- [x] Formulario de contacto (`/contacto`) → tabla `leads` + bandeja en `/admin/contactos`
 
 ## Pendiente
 - [ ] Crear proyecto Supabase, aplicar migración y seed, configurar `.env.local`
@@ -16,5 +18,6 @@
 - [ ] PDF de factura con datos fiscales del coworking
 - [ ] Bolsa de horas de sala incluidas en cada plan y cobro de horas extra
 - [ ] Emails: confirmación de reserva y recordatorio
-- [ ] Contenido real: dirección, fotos, teléfono/WhatsApp, mapa
+- [ ] Contenido real en `src/lib/site.ts`: dirección, teléfono/WhatsApp, email, fotos propias, mapa
+- [ ] Aviso por email al admin cuando llega un contacto nuevo
 - [ ] Recuperar contraseña

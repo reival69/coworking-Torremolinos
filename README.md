@@ -8,6 +8,7 @@ Web pública + área de miembros + panel de administración para un coworking en
 
 1. Crea un proyecto en [Supabase](https://supabase.com) y ejecuta en el SQL Editor, por orden:
    - `supabase/migrations/20261004000000_init.sql`
+   - `supabase/migrations/20261004120000_leads.sql`
    - `supabase/seed.sql` (tarifas y espacios de ejemplo)
 2. Copia `.env.example` a `.env.local` y rellena la URL y la anon key del proyecto.
 3. `npm install && npm run dev` → http://localhost:3000
@@ -23,6 +24,7 @@ En Supabase → Authentication → URL Configuration, añade `https://<tu-domini
 | Ruta | Qué hace |
 | --- | --- |
 | `/` | Landing pública con servicios, tarifas (desde la BD) y ubicación |
+| `/contacto` | Formulario de solicitud de información (`?interes=<producto>`) |
 | `/login` | Acceso y registro de miembros |
 | `/app` | Próximas reservas y estado de la membresía |
 | `/app/reservas` | Disponibilidad por espacio y día, reservar por horas |
@@ -30,6 +32,7 @@ En Supabase → Authentication → URL Configuration, añade `https://<tu-domini
 | `/admin` | Miembros: asignar plan y activar/pausar membresía |
 | `/admin/reservas` | Todas las reservas próximas, cancelar |
 | `/admin/facturas` | Crear facturas, generar cuotas del mes, marcar cobradas |
+| `/admin/contactos` | Solicitudes llegadas desde la web |
 
 ## Reglas de negocio
 
@@ -37,3 +40,5 @@ En Supabase → Authentication → URL Configuration, añade `https://<tu-domini
 - Postgres impide reservas solapadas del mismo espacio (`exclude using gist`).
 - Horario reservable 8:00–20:00, hora de Madrid (`src/app/app/reservas/config.ts`).
 - Un miembro no puede cambiarse rol, plan ni estado (trigger `protect_profile_fields`).
+
+Los textos, productos, FAQ y datos de contacto de la web pública están en `src/lib/site.ts`.

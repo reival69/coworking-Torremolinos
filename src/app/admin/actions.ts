@@ -80,3 +80,13 @@ export async function generateMonthlyInvoices() {
   }
   revalidatePath("/admin/facturas");
 }
+
+export async function setLeadStatus(formData: FormData) {
+  const { supabase } = await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const status = String(formData.get("status") ?? "");
+  if (!["new", "contacted", "won", "lost"].includes(status)) return;
+
+  await supabase.from("leads").update({ status }).eq("id", id);
+  revalidatePath("/admin/contactos");
+}

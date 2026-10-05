@@ -7,6 +7,7 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
     { href: "/admin", label: "Miembros" },
     { href: "/admin/reservas", label: "Reservas" },
     { href: "/admin/facturas", label: "Facturas" },
+    { href: "/admin/contactos", label: "Contactos web" },
     { href: "/app", label: "Mi área" },
   ];
   return (

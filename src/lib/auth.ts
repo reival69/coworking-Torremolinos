@@ -1,11 +1,14 @@
 import "server-only";
 import { cache } from "react";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { isSupabaseConfigured } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import type { Profile } from "@/lib/types";
 
 export const getSession = cache(async () => {
+  // Siempre por petición: depende de la sesión del usuario
+  await connection();
   if (!isSupabaseConfigured()) return null;
   const supabase = await createClient();
   const {
